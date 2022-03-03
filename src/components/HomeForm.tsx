@@ -40,7 +40,7 @@ const HomeForm = () => {
   return (
     <form className="flex flex-col gap-2">
       {formFields.map((field) => (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2" key={field.id}>
           <label htmlFor={field.id}>{field.placeholder}</label>
           <input
             type={field.type}
