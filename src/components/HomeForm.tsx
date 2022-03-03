@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import FormInput from "./FormInput";
 
-interface IHomeFormFields {
+export interface IHomeFormFields {
   type: string;
   name: string;
   id: string;
@@ -36,28 +37,77 @@ const formFields: IHomeFormFields[] = [
   },
 ];
 
-const HomeForm = () => {
+const HomeForm = (props: {
+  setHomeState: React.Dispatch<React.SetStateAction<string>>;
+}) => {
+  const [fields, setFields] = useState(formFields);
+
+  const addField = (field: IHomeFormFields) => {
+    setFields([...fields, field]);
+  };
+
+  const removeField = (field: IHomeFormFields) => {
+    setFields(fields.filter((f) => f.id !== field.id));
+  };
+
+  const handleClose = () => {
+    props.setHomeState("HOME");
+  };
+
+  const [newState, setNewState] = useState("");
+
+  let addInput: IHomeFormFields = {
+    type: "text",
+    name: "",
+    id: "add-input",
+    placeholder: "Add Input",
+  };
+
+  let addInputField: IHomeFormFields = {
+    type: "text",
+    name: newState.split(" ").join(""),
+    id: new Date().getTime().toString(),
+    placeholder: newState,
+  };
+
   return (
     <form className="flex flex-col gap-2">
-      {formFields.map((field) => (
-        <div className="flex flex-col gap-2">
-          <label htmlFor={field.id}>{field.placeholder}</label>
-          <input
-            type={field.type}
-            name={field.name}
-            id={field.id}
-            placeholder={field.placeholder}
-            className="border border-gray-200 p-2 w-full"
-            {...(field.max && { max: field.max })}
-          />
-        </div>
+      {fields.map((field) => (
+        <FormInput field={field} removeField={removeField} key={field.id} />
       ))}
-      <button
-        type="submit"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-4 rounded"
-      >
-        Submit
-      </button>
+      <div className="flex flex-col" key={addInput.id}>
+        <div className="flex gap-2">
+          <input
+            value={newState}
+            onChange={(e) => setNewState(e.target.value)}
+            {...addInputField}
+            className="border border-gray-200 rounded p-2 w-full"
+          />
+          <button
+            type="button"
+            className="min-w-max bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => addField(addInputField)}
+          >
+            Add Input
+          </button>
+        </div>
+      </div>
+
+      <div className="flex w-auto gap-2">
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-4 rounded"
+        >
+          Submit
+        </button>
+        <button
+          type="button"
+          className="bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 my-4 rounded"
+          onClick={handleClose}
+        >
+          Close Form
+        </button>
+      </div>
     </form>
   );
 };
