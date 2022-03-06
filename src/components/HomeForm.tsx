@@ -41,6 +41,7 @@ const HomeForm = (props: {
   setHomeState: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const [fields, setFields] = useState(formFields);
+  const [newState, setNewState] = useState("");
 
   const addField = (field: IHomeFormFields) => {
     setFields([...fields, field]);
@@ -53,8 +54,6 @@ const HomeForm = (props: {
   const handleClose = () => {
     props.setHomeState("HOME");
   };
-
-  const [newState, setNewState] = useState("");
 
   let addInput: IHomeFormFields = {
     type: "text",

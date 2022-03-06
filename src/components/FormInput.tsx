@@ -10,9 +10,9 @@ interface IFormInputProps {
 }
 
 const FormInput = ({ field, removeField }: IFormInputProps) => {
-  const inputClass = `border border-gray-200 rounded p-2 w-full`;
-
   const [value, setValue] = useState("");
+
+  const inputClass = `border border-gray-200 rounded p-2 w-full`;
 
   return (
     <div className="flex flex-col" key={field.id}>
