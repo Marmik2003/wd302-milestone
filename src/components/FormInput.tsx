@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { IHomeFormFields } from "./HomeForm";
+import { IFormField } from "./HomeForm";
 
 interface IFormInputProps {
-  field: IHomeFormFields;
-  removeField: (field: IHomeFormFields) => void;
+  field: IFormField;
+  removeField: (field: IFormField) => void;
   value?: string;
-  setValue?: React.Dispatch<React.SetStateAction<string>>;
+  setValue: (value: string, id: string) => void;
 }
 
-const FormInput = ({ field, removeField }: IFormInputProps) => {
+const FormInput = ({ field, removeField, setValue }: IFormInputProps) => {
   const inputClass = `border border-gray-200 rounded p-2 w-full`;
-
-  const [value, setValue] = useState("");
 
   return (
     <div className="flex flex-col" key={field.id}>
@@ -21,8 +19,8 @@ const FormInput = ({ field, removeField }: IFormInputProps) => {
         <input
           {...field}
           className={inputClass}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
+          value={field.value}
+          onChange={(e) => setValue(e.target.value, field.id)}
         />
         <button
           type="button"

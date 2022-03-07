@@ -6,13 +6,16 @@ import Home from "./components/Home";
 import HomeForm from "./components/HomeForm";
 
 function App() {
-
   const [state, setState] = useState("HOME");
 
   return (
     <Container>
       <Header />
-      {state === 'HOME'? <Home setHomeState={setState} /> : <HomeForm setHomeState={setState} />}
+      {state === "HOME" ? (
+        <Home setHomeState={setState} />
+      ) : (
+        <HomeForm setHomeState={setState} homeState={state} />
+      )}
     </Container>
   );
 }
