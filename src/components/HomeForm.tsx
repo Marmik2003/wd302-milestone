@@ -1,108 +1,19 @@
+import { Link } from "raviger";
 import React, { useEffect, useState, useRef } from "react";
+
+import { IFormField } from "../types/form";
+import { initialState, handleSave } from "../utils/forms";
 import FormInput from "./FormInput";
 
-// Interfaces
-export interface IFormData {
-  id: Number;
-  title: string;
-  formFields: IFormField[];
-}
-
-export interface IFormField {
-  type: string;
-  name: string;
-  id: string;
-  placeholder: string;
-  max?: string;
-  value?: string;
-}
-
-// Default fields
-const formFields: IFormField[] = [
-  {
-    type: "text",
-    name: "firstName",
-    id: "id-first-name",
-    placeholder: "First Name",
-  },
-  {
-    type: "text",
-    name: "lastName",
-    id: "id-last-name",
-    placeholder: "Last Name",
-  },
-  {
-    type: "email",
-    name: "email",
-    id: "id-email",
-    placeholder: "Email",
-  },
-  {
-    type: "date",
-    name: "dateOfBirth",
-    id: "id-date-of-birth",
-    placeholder: "Date of Birth",
-    max: new Date().toISOString().split("T")[0],
-  },
-];
-
-const getLocalForms: () => IFormData[] = () => {
-  const localForms = localStorage.getItem("formDatas");
-  if (localForms) {
-    return JSON.parse(localForms);
-  }
-  return [];
-};
-
-const initialState: (id: string) => IFormData = (id) => {
-  const formData = getLocalForms();
-  if (formData.length > 0) {
-    for (let i = 0; i < formData.length; i++) {
-      if (formData[i].id.toString() === id) {
-        return formData[i];
-      }
-    }
-  }
-  const newForm = {
-    id: parseInt(id),
-    title: "Untitled Form",
-    formFields: formFields,
-  };
-  saveLocalForms([...formData, newForm]);
-  return newForm;
-};
-
-const saveLocalForms = (localForms: IFormData[]) => {
-  localStorage.setItem("formDatas", JSON.stringify(localForms));
-};
-
-const handleSave = (state: IFormData) => {
-  const localForms = getLocalForms();
-  const updatedLocalForms = localForms.map((f) => {
-    if (f.id === state.id) {
-      return state;
-    }
-    return f;
-  });
-  saveLocalForms(updatedLocalForms);
-};
-
 // HomeForm Component
-const HomeForm = (props: {
-  homeState: string;
-  setHomeState: React.Dispatch<React.SetStateAction<string>>;
-}) => {
-  const [form, setForm] = useState(() => initialState(props.homeState));
+const HomeForm = (props: { formId: Number }) => {
+  const [form, setForm] = useState(() => initialState(props.formId));
   const [newState, setNewState] = useState("");
 
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    document.title = "Form Builder";
     titleRef.current?.focus();
-    return () => {
-      document.title = "React Form";
-    };
   }, []);
 
   useEffect(() => {
@@ -145,16 +56,14 @@ const HomeForm = (props: {
       ...form,
       formFields: form.formFields.map((f) => {
         if (f.id === id) {
-          return { ...f, value };
+          return { ...f, placeholder: value };
         }
         return f;
       }),
     });
   };
 
-  const handleClose = () => {
-    props.setHomeState("HOME");
-  };
+  // const handleClose = () => navigate("/");
 
   return (
     <form className="flex flex-col gap-2 divide-y-2 divide-dotted">
@@ -199,13 +108,12 @@ const HomeForm = (props: {
           >
             Save
           </button>
-          <button
-            type="button"
+          <Link
+            href="/"
             className="bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 my-4 rounded"
-            onClick={handleClose}
           >
             Close Form
-          </button>
+          </Link>
         </div>
       </div>
     </form>
