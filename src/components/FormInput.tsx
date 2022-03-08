@@ -19,7 +19,7 @@ const FormInput = ({ field, removeField, setValue }: IFormInputProps) => {
         <input
           {...field}
           className={inputClass}
-          value={field.value}
+          value={field.placeholder}
           onChange={(e) => setValue(e.target.value, field.id)}
         />
         <button
