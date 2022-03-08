@@ -1,66 +1,9 @@
 import { Link } from "raviger";
 import React, { useEffect, useState, useRef } from "react";
 
+import { IFormField } from "../types/form";
+import { initialState, handleSave } from "../utils/forms";
 import FormInput from "./FormInput";
-
-// Interfaces
-export interface IFormData {
-  id: Number;
-  title: string;
-  formFields: IFormField[];
-}
-
-export interface IFormField {
-  type: string;
-  name: string;
-  id: string;
-  placeholder: string;
-  max?: string;
-}
-
-// Default fields
-const formFields: IFormField[] = [];
-
-const getLocalForms: () => IFormData[] = () => {
-  const localForms = localStorage.getItem("formDatas");
-  if (localForms) {
-    return JSON.parse(localForms);
-  }
-  return [];
-};
-
-const initialState: (id: Number) => IFormData = (id) => {
-  const formData = getLocalForms();
-  if (formData.length > 0) {
-    for (let i = 0; i < formData.length; i++) {
-      if (formData[i].id === id) {
-        return formData[i];
-      }
-    }
-  }
-  const newForm = {
-    id,
-    title: "Untitled Form",
-    formFields: formFields,
-  };
-  saveLocalForms([...formData, newForm]);
-  return newForm;
-};
-
-const saveLocalForms = (localForms: IFormData[]) => {
-  localStorage.setItem("formDatas", JSON.stringify(localForms));
-};
-
-const handleSave = (state: IFormData) => {
-  const localForms = getLocalForms();
-  const updatedLocalForms = localForms.map((f) => {
-    if (f.id === state.id) {
-      return state;
-    }
-    return f;
-  });
-  saveLocalForms(updatedLocalForms);
-};
 
 // HomeForm Component
 const HomeForm = (props: { formId: Number }) => {

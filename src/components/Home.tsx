@@ -1,9 +1,8 @@
 import React, { useState, useEffect, Key } from "react";
-import { IFormData } from "./HomeForm";
+import { IFormData } from "../types/form";
 
-import logo from "../assets/logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
+import { faEdit, faEye, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { Link, useQueryParams } from "raviger";
 
 const Home = () => {
@@ -34,10 +33,6 @@ const Home = () => {
     setLocalForms(updatedLocalForms);
     localStorage.setItem("formDatas", JSON.stringify(updatedLocalForms));
   };
-
-  // const handleClick = () => {
-  //   navigate(`/form/${new Date()}`);
-  // };
 
   return (
     <>
@@ -76,6 +71,12 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="flex columns-2 space-x-2">
+                  <Link
+                    href={`/preview/${f.id}`}
+                    className="w-full bg-blue-400 font-medium px-2 py-1 rounded-md text-white tracking-wide"
+                  >
+                    <FontAwesomeIcon icon={faEye} />
+                  </Link>
                   <Link
                     href={`/form/${f.id}`}
                     className="w-full bg-teal-400 font-medium px-2 py-1 rounded-md text-white tracking-wide"

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IFormField } from "./HomeForm";
+import { IFormField } from "../types/form";
 
 interface IFormInputProps {
   field: IFormField;
